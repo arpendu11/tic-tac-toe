@@ -40,7 +40,9 @@ public class GameService {
 	}
 
 	public Game getGameByPlayer(String username) {
-		return gameSession.getGameSessionByUsername(username);
+		Game game = gameSession.getGameSessionByUsername(username);
+		logger.info("Present State of the game: "+ game.toString());
+		return game;
 	}
 	
 	public Game endGame(String username) throws PlayerNotFoundException {

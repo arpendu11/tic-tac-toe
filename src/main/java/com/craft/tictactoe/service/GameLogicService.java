@@ -46,7 +46,7 @@ public class GameLogicService {
 			if (row > 0 && row <= game.getSize() && column > 0 && column <= game.getSize()) {
 				String[][] board = game.getBoard();
 				if(!(board[row - 1][column - 1].equals(MarkerType.CROSS.getShape())) && !(board[row - 1][column - 1]).equals(MarkerType.CIRCLE.getShape())) {
-					board[row - 1][column - 1] = player.getMarker().toString();
+					board[row - 1][column - 1] = player.getMarker().getShape();
 					game.setNoOfTurns(turns++);
 	            } else {
 	    			logger.error(
@@ -57,6 +57,7 @@ public class GameLogicService {
 					game.setStatus(GameStatus.FIRST_PLAYER_WON);
 					if (game.getType() == GameType.COMPUTER) {
 						game.getPlayers().get(0).setStatus(PlayerStatus.WINNER);
+						game.getPlayers().get(1).setStatus(PlayerStatus.LOSER);
 					} else {
 						for (Player p : game.getPlayers()) {
 							if (p.getUserName().equals(player.getUserName())) {
@@ -165,6 +166,115 @@ public class GameLogicService {
 		boolean moveTaken = false;
 		int counter = 1;
 		int bs = board.length;
+		
+		// BLOCKS!!!! //
+        counter = 1;
+        // check if you can block a win horizontally
+        for(int a = 0; a<bs; a++)
+        {
+            for(int j=0; j<bs-2; j++)
+            {
+                if((board[a][j].equals(board[a][j+1]) && board[a][j].equals(humanMarker.getShape()))
+                        ||(board[a][j].equals(board[a][j+2]) && board[a][j].equals(humanMarker.getShape()))
+                        || (board[a][j+1].equals(board[a][j+2]) && board[a][j+1].equals(humanMarker.getShape())))
+                {
+                    counter = counter+1;
+                }
+                if(counter == bs-1)
+                {
+                    for(int k=0;k<bs;k++)
+                    {
+                        if(!board[a][k].equals(humanMarker.getShape()) && !board[a][k].equals(computerMarker.getShape()))
+                        {
+                            logger.info("Computer placing the horizontal marker at: "+(a+1)+", "+(k+1));
+                            board[a][k] = computerMarker.getShape();
+                            moveTaken = true;
+                            return board;
+                        }
+                    }
+                }
+            }
+            counter = 1;
+        }
+        
+        counter = 1;
+        // check if you can block a win vertically
+        for(int i = 0; i<bs; i++)
+        {
+            for(int j=0; j<bs-2; j++)
+            {
+                if(board[j][i].equals(board[j+1][i]) && board[j][i].equals(humanMarker.getShape())
+                        || (board[j][i].equals(board[j+2][i]) && board[j][i].equals(humanMarker.getShape()))
+                        || (board[j+1][i].equals(board[j+2][i]) && board[j+1][i].equals(humanMarker.getShape())))
+                {
+                    counter = counter+1;
+                }
+                if(counter == bs-1)
+                {
+                    for(int k=0; k<bs; k++)
+                    {
+                        if(!board[i][k].equals(humanMarker.getShape()) && !board[i][k].equals(computerMarker.getShape()))
+                        {
+                            logger.info("Computer placing the vertical marker at: "+(k+1)+", "+(i+1));
+                            board[k][i] = computerMarker.getShape();
+                            moveTaken = true;
+                            return board;
+                        }
+                    }
+                }
+                //}
+            }
+            counter = 1;
+        }
+        
+        
+        // check if you can block a win diagonally left-top to right-bottom
+        counter = 1;
+        for(int j=1;j<bs;j++)
+        {
+            int i=0;
+            if(board[i][i].equals(board[j][j]) && board[j][j].equals(humanMarker.getShape()))
+            {
+                counter = counter+1;
+            }
+            if(counter == bs-1)
+            {
+                for(int k=0;k<bs;k++)
+                {
+                    if(!board[k][k].equals(humanMarker.getShape()) && !board[k][k].equals(computerMarker.getShape()))
+                    {
+                        logger.info("Computer placing the diagonal LB-RT marker at: "+(k+1)+", "+(k+1));
+                        board[k][k] = computerMarker.getShape();
+                        moveTaken = true;
+                        return board;
+                    }
+                }
+            }
+        }
+        
+        //Check if you can block a win diagonally from right-top to left-bottom
+        counter = 1;
+        for(int i=0;i<bs-1;i++)
+        {
+            if(board[i][bs-1-i].equals(board[i+1][bs-1-i-1]) && board[i][bs-1-i].equals(humanMarker.getShape()))
+            {
+                counter = counter+1;
+            }
+            if(counter == bs-1)
+            {
+                for(int k=0;k<bs;k++)
+                {
+                    if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
+                    {
+                        logger.info("Computer placing the diagonal RT-LB marker at: "+(k+1)+", "+(bs-1-k+1));
+                        board[k][bs-1-k] = computerMarker.getShape();
+                        moveTaken = true;
+                        return board;
+                    }
+                }
+            }
+        }
+        
         // check if you can take a win vertically
         for(int a = 0; a<bs; a++)
         {
@@ -292,114 +402,6 @@ public class GameLogicService {
                 }
             }
         }
-  
-        // BLOCKS!!!! //
-        counter = 1;
-        // check if you can block a win horizontally
-        for(int a = 0; a<bs; a++)
-        {
-            for(int j=0; j<bs-2; j++)
-            {
-                if((board[a][j].equals(board[a][j+1]) && board[a][j].equals(humanMarker.getShape()))
-                        ||(board[a][j].equals(board[a][j+2]) && board[a][j].equals(humanMarker.getShape()))
-                        || (board[a][j+1].equals(board[a][j+2]) && board[a][j+1].equals(humanMarker.getShape())))
-                {
-                    counter = counter+1;
-                }
-                if(counter == bs-1)
-                {
-                    for(int k=0;k<bs;k++)
-                    {
-                        if(!board[a][k].equals(humanMarker.getShape()) && !board[a][k].equals(computerMarker.getShape()))
-                        {
-                            logger.info("I am placing the marker at: "+(a+1)+", "+(k+1));
-                            board[a][k] = computerMarker.getShape();
-                            moveTaken = true;
-                            return board;
-                        }
-                    }
-                }
-            }
-            counter = 1;
-        }
-        
-        counter = 1;
-        // check if you can block a win vertically
-        for(int i = 0; i<bs; i++)
-        {
-            for(int j=0; j<bs-2; j++)
-            {
-                if(board[j][i].equals(board[j+1][i]) && board[j][i].equals(humanMarker.getShape())
-                        || (board[j][i].equals(board[j+2][i]) && board[j][i].equals(humanMarker.getShape()))
-                        || (board[j+1][i].equals(board[j+2][i]) && board[j+1][i].equals(humanMarker.getShape())))
-                {
-                    counter = counter+1;
-                }
-                if(counter == bs-1)
-                {
-                    for(int k=0; k<bs; k++)
-                    {
-                        if(!board[i][k].equals(humanMarker.getShape()) && !board[i][k].equals(computerMarker.getShape()))
-                        {
-                            logger.info("I am placing the marker at: "+(k+1)+", "+(i+1));
-                            board[k][i] = computerMarker.getShape();
-                            moveTaken = true;
-                            return board;
-                        }
-                    }
-                }
-                //}
-            }
-            counter = 1;
-        }
-        
-        
-        // check if you can block a win diagonally left-top to right-bottom
-        counter = 1;
-        for(int j=1;j<bs;j++)
-        {
-            int i=0;
-            if(board[i][i].equals(board[j][j]) && board[j][j].equals(humanMarker.getShape()))
-            {
-                counter = counter+1;
-            }
-            if(counter == bs-1)
-            {
-                for(int k=0;k<bs;k++)
-                {
-                    if(!board[k][k].equals(humanMarker.getShape()) && !board[k][k].equals(computerMarker.getShape()))
-                    {
-                        logger.info("I am placing the marker at: "+(k+1)+", "+(k+1));
-                        board[k][k] = computerMarker.getShape();
-                        moveTaken = true;
-                        return board;
-                    }
-                }
-            }
-        }
-        
-        //Check if you can block a win diagonally from right-top to left-bottom
-        counter = 1;
-        for(int i=0;i<bs-1;i++)
-        {
-            if(board[i][bs-1-i].equals(board[i+1][bs-1-i-1]) && board[i][bs-1-i].equals(humanMarker.getShape()))
-            {
-                counter = counter+1;
-            }
-            if(counter == bs-1)
-            {
-                for(int k=0;k<bs;k++)
-                {
-                    if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
-                    {
-                        logger.info("I am placing the marker at: "+(k+1)+", "+(bs-1-k+1));
-                        board[k][bs-1-k] = computerMarker.getShape();
-                        moveTaken = true;
-                        return board;
-                    }
-                }
-            }
-        }
         
         int randRow = 0;
         int randCol = 0;
@@ -409,7 +411,7 @@ public class GameLogicService {
         	randCol = (int) (Math.random() * bs);
         	
         	if (!board[randRow][randCol].equals(humanMarker.getShape()) && !board[randRow][randCol].equals(computerMarker.getShape())) {
-        		logger.info("I am placing marker at: " + (randRow+1) + ", " +(randCol+1));
+        		logger.info("Computer placing random marker at: " + (randRow+1) + ", " +(randCol+1));
         		board[randRow][randCol] = computerMarker.getShape();
         		moveTaken = true;
         	}

@@ -1,5 +1,7 @@
 package com.craft.tictactoe.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ public class PlayerService {
 	// listPlayers all
 	// getPlayer by username
 	
+	private final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 	private final PlayerPoolRepository playerPool = PlayerPoolRepository.getInstance();
 	
 	@Autowired
@@ -43,6 +46,7 @@ public class PlayerService {
 
 	public Player getPlayer(String userName) {
 		Game game = gameService.getGameByPlayer(userName);
+		logger.info("Present State of the game: "+ game.toString());
 		return game.getPlayers().stream().filter(e -> e.getUserName().equals(userName)).findFirst().get();
 	}
 

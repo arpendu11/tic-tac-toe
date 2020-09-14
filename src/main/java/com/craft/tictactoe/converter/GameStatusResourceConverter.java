@@ -1,5 +1,7 @@
 package com.craft.tictactoe.converter;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Component;
 
 import com.craft.tictactoe.constant.GenericMessage;
@@ -65,7 +67,7 @@ public class GameStatusResourceConverter extends AbstractConverter<Game, GameSta
 
 		// Print board structure
 		
-		GameStatusResource resource = new GameStatusResource(source.getId(), message, next_step, source.getStatus(), "structure");
+		GameStatusResource resource = new GameStatusResource(source.getId(), message, next_step, source.getStatus(), Arrays.deepToString(source.getBoard()));
 		return resource;
 	}
 

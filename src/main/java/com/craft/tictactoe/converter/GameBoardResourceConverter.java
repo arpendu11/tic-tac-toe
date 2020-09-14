@@ -1,5 +1,7 @@
 package com.craft.tictactoe.converter;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Component;
 
 import com.craft.tictactoe.constant.GameStatus;
@@ -28,10 +30,8 @@ public class GameBoardResourceConverter extends AbstractConverter<Game, GameBoar
 				}
 			}
 		}
-		
-		// Print board structure 
 
-		GameBoardResource resource = new GameBoardResource(source.getId(), message, next_step, success, "structure");
+		GameBoardResource resource = new GameBoardResource(source.getId(), message, next_step, success, Arrays.deepToString(source.getBoard()));
 		return resource;
 	}
 

@@ -155,6 +155,6 @@ public class Game {
 	@Override
 	public String toString() {
 		return "Game [id=" + id + ", players=" + players + ", size=" + size + ", type=" + type + ", status=" + status
-				+ ", board=" + Arrays.toString(board) + "]";
+				+ ", board=" + Arrays.deepToString(board) + "]";
 	}
 }
