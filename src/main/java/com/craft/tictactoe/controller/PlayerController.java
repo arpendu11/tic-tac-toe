@@ -54,10 +54,6 @@ public class PlayerController {
 	
 	@PostMapping(path = "/move", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MoveValidResource> playNextMove(@RequestBody @Valid MoveDTO move) {
-		// Fetch the gaming session where player is playing
-		// Structure the board to printable format
-		// Play the next move and make Computer play its move
-		// Determine if the player had a winning move or not
 		if (checkPlayer(move.getUserName())) {
 			if (playerService.getPlayer(move.getUserName()).getStatus().equals(PlayerStatus.PLAYING)) {
 				Player player = playerService.playNextMove(playerService.getPlayer(move.getUserName()), move.getRow(), move.getColumn());

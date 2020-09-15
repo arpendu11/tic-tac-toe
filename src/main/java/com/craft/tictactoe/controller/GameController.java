@@ -61,7 +61,7 @@ public class GameController {
 	@PostMapping(path = "/setBoard", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<GameBoardResource> setGamingBoard(@RequestBody @Valid SetBoardDTO board) {
 		if (playerController.checkPlayer(board.getUserName())) {
-			Game game = gameService.setGameProperties(board);
+			Game game = gameService.setGameProperties(board.getUserName(), board.getSize(), board.getMarker());
 			return new ResponseEntity<GameBoardResource>(gameBoardResourceConverter.convert(game), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

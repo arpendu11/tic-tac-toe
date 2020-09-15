@@ -28,6 +28,9 @@ public class GameBoardResourceConverter extends AbstractConverter<Game, GameBoar
 				} else {
 					next_step = NextStep.GAME_NEXT_TURN_PLAYER.getMessage();
 				}
+			} else if (source.getStatus() == GameStatus.FIRST_PLAYER_WON) {
+				message = GenericMessage.PLAYER_WINNER.getMessage();
+				next_step = NextStep.PLAYER_WINNER.getMessage();
 			}
 		}
 

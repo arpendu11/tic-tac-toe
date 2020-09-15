@@ -11,11 +11,6 @@ import com.craft.tictactoe.repository.PlayerPoolRepository;
 
 @Service
 public class PlayerService {
-
-	
-	// create new player by taking playerDTO
-	// listPlayers all
-	// getPlayer by username
 	
 	private final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 	private final PlayerPoolRepository playerPool = PlayerPoolRepository.getInstance();

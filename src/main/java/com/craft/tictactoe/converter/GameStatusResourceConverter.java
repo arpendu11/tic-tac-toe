@@ -64,8 +64,6 @@ public class GameStatusResourceConverter extends AbstractConverter<Game, GameSta
 				break;
 			}
 		}
-
-		// Print board structure
 		
 		GameStatusResource resource = new GameStatusResource(source.getId(), message, next_step, source.getStatus(), Arrays.deepToString(source.getBoard()));
 		return resource;

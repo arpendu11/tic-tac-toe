@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.craft.tictactoe.constant.GameStatus;
 import com.craft.tictactoe.constant.GameType;
 import com.craft.tictactoe.constant.MarkerType;
-import com.craft.tictactoe.dto.SetBoardDTO;
+import com.craft.tictactoe.constant.PlayerStatus;
 import com.craft.tictactoe.entity.Game;
 import com.craft.tictactoe.entity.Player;
 import com.craft.tictactoe.exceptions.PlayerNotFoundException;
@@ -16,12 +16,6 @@ import com.craft.tictactoe.repository.GameSessionRepository;
 
 @Service
 public class GameService {
-
-	// create new game by taking gameDTO and player
-	// setBoard existing game by taking boardDTO and player
-	// update gameStatus
-	// getAllPlayers playing game by taking player
-	// getGame by taking gameId
 
 	private final Logger logger = LoggerFactory.getLogger(GameService.class);
 	private final GameSessionRepository gameSession = GameSessionRepository.getInstance();
@@ -61,26 +55,35 @@ public class GameService {
 		}
 	}
 
-	public Game setGameProperties(SetBoardDTO board) {
-		Game game = gameSession.getGameSessionByUsername(board.getUserName());
-		game.setSize(board.getSize());
+	public Game setGameProperties(String username, int size, MarkerType marker) {
+		Game game = gameSession.getGameSessionByUsername(username);
+		if (size == 1) {
+			game.setSize(size);
+			game.setStatus(GameStatus.FIRST_PLAYER_WON);
+			game.getPlayers().stream().filter(e -> e.getUserName().equals(username)).findFirst().get().setStatus(PlayerStatus.WINNER);
+			game.setBoard(gameLogic.createBoard(size));
+			game.setNoOfTurns(0);
+			return game;
+		}
+		System.out.println("Size: " + game.toString());
+		game.setSize(size);
 		if (game.getType() == GameType.COMPUTER) {
-			game.getPlayers().get(0).setMarker(board.getMarker());
-			if (board.getMarker() == MarkerType.CROSS) {
+			game.getPlayers().get(0).setMarker(marker);
+			if (marker == MarkerType.CROSS) {
 				game.getPlayers().get(1).setMarker(MarkerType.CIRCLE);
 			} else {
 				game.getPlayers().get(1).setMarker(MarkerType.CROSS);
 			}
 			game.setStatus(GameStatus.IN_PROGRESS);
 		} else {
-			game.getPlayers().stream().filter(e -> e.getUserName().equals(board.getUserName())).findFirst().get().setMarker(board.getMarker());
+			game.getPlayers().stream().filter(e -> e.getUserName().equals(username)).findFirst().get().setMarker(marker);
 			if (game.isAvailable()) {
 				game.setStatus(GameStatus.WAITING_FOR_ANOTHER_PLAYER_TO_JOIN);
 			} else {
 				game.setStatus(GameStatus.IN_PROGRESS);
 			}
 		}
-		game.setBoard(gameLogic.createBoard(board.getSize()));
+		game.setBoard(gameLogic.createBoard(size));
 		game.setNoOfTurns(0);
 		logger.info("Present State of the game: "+ game.toString());
 		return game;

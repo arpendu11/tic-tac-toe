@@ -47,7 +47,7 @@ public class GameLogicService {
 				String[][] board = game.getBoard();
 				if(!(board[row - 1][column - 1].equals(MarkerType.CROSS.getShape())) && !(board[row - 1][column - 1]).equals(MarkerType.CIRCLE.getShape())) {
 					board[row - 1][column - 1] = player.getMarker().getShape();
-					game.setNoOfTurns(turns++);
+					game.setNoOfTurns(turns+1);
 	            } else {
 	    			logger.error(
 	    					"Already a marker has occupied the space! Please guess again !");
@@ -68,12 +68,10 @@ public class GameLogicService {
 						}
 					}
 				} else {
-					// let Computer take the turn
-					// switch turn for another player
 					if (game.getType() == GameType.COMPUTER) {
 						String[][] boardComputer = blockMove(game.getBoard(), game.getPlayers().get(0).getMarker(), game.getPlayers().get(1).getMarker());
 						game.setBoard(boardComputer);
-						// check if computer has played winning move and update the status
+						game.setNoOfTurns(turns+2);
 						if (hasWon(boardComputer)) {
 							game.setStatus(GameStatus.COMPUTER_WON);
 							game.getPlayers().get(0).setStatus(PlayerStatus.LOSER);
@@ -186,7 +184,7 @@ public class GameLogicService {
                     {
                         if(!board[a][k].equals(humanMarker.getShape()) && !board[a][k].equals(computerMarker.getShape()))
                         {
-                            logger.info("Computer placing the horizontal marker at: "+(a+1)+", "+(k+1));
+                            logger.info("Computer placing the horizontal blocking marker at: "+(a+1)+", "+(k+1));
                             board[a][k] = computerMarker.getShape();
                             moveTaken = true;
                             return board;
@@ -215,7 +213,7 @@ public class GameLogicService {
                     {
                         if(!board[i][k].equals(humanMarker.getShape()) && !board[i][k].equals(computerMarker.getShape()))
                         {
-                            logger.info("Computer placing the vertical marker at: "+(k+1)+", "+(i+1));
+                            logger.info("Computer placing the vertical blocking marker at: "+(k+1)+", "+(i+1));
                             board[k][i] = computerMarker.getShape();
                             moveTaken = true;
                             return board;
@@ -243,7 +241,7 @@ public class GameLogicService {
                 {
                     if(!board[k][k].equals(humanMarker.getShape()) && !board[k][k].equals(computerMarker.getShape()))
                     {
-                        logger.info("Computer placing the diagonal LB-RT marker at: "+(k+1)+", "+(k+1));
+                        logger.info("Computer placing the diagonal LT-RB blocking marker at: "+(k+1)+", "+(k+1));
                         board[k][k] = computerMarker.getShape();
                         moveTaken = true;
                         return board;
@@ -266,7 +264,7 @@ public class GameLogicService {
                 {
                     if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
                     {
-                        logger.info("Computer placing the diagonal RT-LB marker at: "+(k+1)+", "+(bs-1-k+1));
+                        logger.info("Computer placing the diagonal RT-LB blocking marker at: "+(k+1)+", "+(bs-1-k+1));
                         board[k][bs-1-k] = computerMarker.getShape();
                         moveTaken = true;
                         return board;
@@ -292,6 +290,7 @@ public class GameLogicService {
                     {
                         if(!board[k][a].equals(humanMarker.getShape()) && !board[k][a].equals(computerMarker.getShape()))
                         {
+                        	logger.info("Computer placing the vertical winning marker at: "+(k+1)+", "+(a+1));
                             board[k][a] = computerMarker.getShape();
                             moveTaken = true;
                             return board;
@@ -320,7 +319,8 @@ public class GameLogicService {
                     {
                         if(!board[i][k].equals(humanMarker.getShape()) && !board[i][k].equals(computerMarker.getShape()))
                         {
-                            board[i][k] = computerMarker.getShape();
+                        	logger.info("Computer placing the horizontal winning marker at: "+(i+1)+", "+(k+1));
+                        	board[i][k] = computerMarker.getShape();
                             moveTaken = true;
                             return board;
                         }
@@ -349,7 +349,8 @@ public class GameLogicService {
                         {
                             if(!board[k][k].equals(humanMarker.getShape()) && !board[k][k].equals(computerMarker.getShape()))
                             {
-                                board[k][k] = computerMarker.getShape();
+                            	logger.info("Computer placing the diagonal LT-RB winning marker at: "+(k+1)+", "+(k+1));
+                            	board[k][k] = computerMarker.getShape();
                                 moveTaken = true;
                                 return board;
                             }
@@ -373,7 +374,8 @@ public class GameLogicService {
                     {
                         if(!board[k][k].equals(humanMarker.getShape()) && !board[k][k].equals(computerMarker.getShape()))
                         {
-                            board[k][k] = computerMarker.getShape();
+                        	logger.info("Computer placing the diagonal winnning marker at: "+(k+1)+", "+(k+1));
+                        	board[k][k] = computerMarker.getShape();
                             moveTaken = true;
                             return board;
                         }
@@ -395,7 +397,8 @@ public class GameLogicService {
                 {
                     if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
                     {
-                        board[k][bs-1-k] = computerMarker.getShape();
+                    	logger.info("Computer placing the diagonal RT-LB winning marker at: "+(k+1)+", "+(bs-1-k+1));
+                    	board[k][bs-1-k] = computerMarker.getShape();
                         moveTaken = true;
                         return board;
                     }
