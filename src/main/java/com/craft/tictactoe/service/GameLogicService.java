@@ -88,7 +88,7 @@ public class GameLogicService {
 		}
 	}
 
-	private boolean hasWon(String[][] board) {
+	public boolean hasWon(String[][] board) {
 		int counter = 1;
 		int N = board.length;
         //horizontal check
@@ -158,7 +158,7 @@ public class GameLogicService {
 		return false;
 	}
 
-	private String[][] blockMove(String[][] board, MarkerType humanMarker, MarkerType computerMarker) {
+	public String[][] blockMove(String[][] board, MarkerType humanMarker, MarkerType computerMarker) {
 		boolean moveTaken = false;
 		int counter = 1;
 		int bs = board.length;

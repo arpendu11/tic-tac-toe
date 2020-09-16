@@ -39,7 +39,14 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        ApiInfo apiInfo = new ApiInfo("Tic Tac Toe Game Rest API", "A multi-player NXN board size tic-tac-toe game that can be played with another human or computer.", "v1.0", "Terms of service", new Contact("Arpendu Kumar Garai", "https://github.com/arpendu11", "arpendug3@gmail.com"), "License of API", "API license URL", Collections.emptyList());
+        ApiInfo apiInfo = new ApiInfo("Tic Tac Toe Game Rest API",
+        		"A multi-player NXN board size tic-tac-toe game that can be played with another human or computer.",
+        		"v1.0",
+        		"Terms of service",
+        		new Contact("Arpendu Kumar Garai", "https://github.com/arpendu11", "arpendug3@gmail.com"),
+        		"License of API",
+        		"API license URL",
+        		Collections.emptyList());
         return apiInfo;
     }
 }
