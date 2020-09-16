@@ -49,8 +49,7 @@ public class GameLogicService {
 					board[row - 1][column - 1] = player.getMarker().getShape();
 					game.setNoOfTurns(turns+1);
 	            } else {
-	    			logger.error(
-	    					"Already a marker has occupied the space! Please guess again !");
+	    			logger.error("Already a marker has occupied the space! Please guess again !");
 	    			throw new UnsupportedMoveException();            	
 	            }
 				if (hasWon(board)) {
@@ -83,8 +82,7 @@ public class GameLogicService {
 					}
 				}
 			} else {
-				logger.error(
-						"Either row or column value is not correct. They should be greater than 0 and less than the board size.");
+				logger.error("Either row or column value is not correct. They should be greater than 0 and less than the board size.");
 				throw new UnsupportedCoordinateException();
 			}
 		}

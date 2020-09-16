@@ -2,6 +2,8 @@ package com.craft.tictactoe.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +33,8 @@ import com.craft.tictactoe.service.GameService;
 @RequestMapping(path = "/game", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GameController {
 	
+	private final Logger logger = LoggerFactory.getLogger(GameController.class);
+	
 	@Autowired
 	private PlayerController playerController;
 	
@@ -55,6 +59,7 @@ public class GameController {
 				return new ResponseEntity<>(gameResourceConverter.convert(newGame), HttpStatus.CREATED);
 			}
 		}
+		logger.error("Player " + dto.getUserName() + " is already playing a game. Please exit to start a new game.");
 		return new ResponseEntity<>(HttpStatus.CONFLICT);
 	}
 	
@@ -64,6 +69,7 @@ public class GameController {
 			Game game = gameService.setGameProperties(board.getUserName(), board.getSize(), board.getMarker());
 			return new ResponseEntity<GameBoardResource>(gameBoardResourceConverter.convert(game), HttpStatus.OK);
 		} else {
+			logger.error("Player " + board.getUserName() + " was not found playing any game");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -74,6 +80,7 @@ public class GameController {
 			Game game = gameService.getGameByPlayer(userName);
 			return new ResponseEntity<GameStatusResource>(gameStatusResourceConverter.convert(game), HttpStatus.OK);
 		} else {
+			logger.error("Player " + userName + " was not found playing any game");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -84,6 +91,7 @@ public class GameController {
 			Game game = gameService.endGame(playerDTO.getUserName());
 			return new ResponseEntity<GameResource>(gameResourceConverter.convert(game), HttpStatus.OK);
 		} else {
+			logger.error("Player " + playerDTO.getUserName() + " was not found playing any game");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}

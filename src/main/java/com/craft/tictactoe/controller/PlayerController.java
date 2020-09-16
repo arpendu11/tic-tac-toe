@@ -2,6 +2,8 @@ package com.craft.tictactoe.controller;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +28,8 @@ import com.craft.tictactoe.service.PlayerService;
 @RequestMapping(path = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PlayerController {
 	
+	private final Logger logger = LoggerFactory.getLogger(PlayerController.class);
+	
 	@Autowired
 	private PlayerService playerService;
 	
@@ -49,6 +53,7 @@ public class PlayerController {
 			Player player = playerService.getPlayer(userName);
 			return new ResponseEntity<WhoseTurnResource>(whoseTurnResourceConverter.convert(player), HttpStatus.OK);
 		}
+		logger.error("Player " + userName + " was not found playing any game");
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
@@ -61,6 +66,7 @@ public class PlayerController {
 			}
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
+		logger.error("Player " + move.getUserName() + " was not found playing any game");
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }
