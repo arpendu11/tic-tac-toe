@@ -38,7 +38,7 @@ public class GameLogicService {
 		Game game = gameService.getGameByPlayer(player.getUserName());
 		int turns = game.getNoOfTurns();
 		
-		if (turns == game.getSize()*game.getSize()) {
+		if (turns >= game.getSize()*game.getSize()-1) {
 			game.setStatus(GameStatus.MATCH_TIE);
 			game.getPlayers().get(0).setStatus(PlayerStatus.TIE);
 			game.getPlayers().get(1).setStatus(PlayerStatus.TIE);
