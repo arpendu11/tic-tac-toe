@@ -68,14 +68,20 @@ public class GameSessionRepository {
 
 	public synchronized Game removePlayer(String userName) {
 		Game game = null;
+		Player player = null;
+		boolean validGame = false;
 		for (Game s : session.values()) {
 			for (Player p : s.getPlayers()) {
 				if (p.getUserName().equals(userName)) {
-					s.setStatus(GameStatus.CLOSED);
-					game = s;
-					s.getPlayers().remove(p);
-					endGameSession(s.getId());
+					validGame = true;
+					player = p;
 				}
+			}
+			if (validGame) {
+				s.setStatus(GameStatus.CLOSED);
+				game = s;
+				s.getPlayers().remove(player);
+				endGameSession(s.getId());
 			}
 		}
 		return game;

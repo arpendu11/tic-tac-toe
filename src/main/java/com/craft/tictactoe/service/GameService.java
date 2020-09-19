@@ -40,14 +40,18 @@ public class GameService {
 	}
 
 	public Game endGame(String username) throws PlayerNotFoundException {
-		playerService.removePlayer(username);
-		Game game = gameSession.removePlayer(username);
-
+		Game game = getGameByPlayer(username);
 		if (game.getType().equals(GameType.HUMAN)) {
-			playerService.removePlayer(game.getPlayers().get(0).getUserName());
+			for (Player p: game.getPlayers()) {
+				if (!p.getUserName().equals(username)) {
+					playerService.removePlayer(p.getUserName());
+				}
+			}
 		}
-		logger.info("Present State of the game: " + game.toString());
-		return game;
+		playerService.removePlayer(username);
+		Game gameDeleted = gameSession.removePlayer(username);
+		logger.info("Present State of the game: " + gameDeleted.toString());
+		return gameDeleted;
 	}
 
 	public Game setGameProperties(String username, int size, MarkerType marker) {
