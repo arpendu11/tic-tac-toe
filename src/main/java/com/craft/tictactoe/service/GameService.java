@@ -22,37 +22,32 @@ public class GameService {
 
 	@Autowired
 	private PlayerService playerService;
-	
+
 	@Autowired
 	private GameLogicService gameLogic;
 
 	public Game createNewGame(Player newPlayer, GameType type) {
 		Game game = new Game(newPlayer, type);
 		gameSession.createGameSession(game);
-		logger.info("New game created: "+ game.toString());
+		logger.info("New game created: " + game.toString());
 		return game;
 	}
 
 	public Game getGameByPlayer(String username) {
 		Game game = gameSession.getGameSessionByUsername(username);
-		logger.info("Present State of the game: "+ game.toString());
+		logger.info("Present State of the game: " + game.toString());
 		return game;
 	}
-	
-	public Game endGame(String username) throws PlayerNotFoundException {
-		if (playerService.checkPlayerPlaying(username)) {
-			playerService.removePlayer(username);
-			Game game = gameSession.removePlayer(username);
 
-			if (game.getType().equals(GameType.HUMAN)) {
-				playerService.removePlayer(game.getPlayers().get(0).getUserName());
-			}
-			logger.info("Present State of the game: "+ game.toString());
-			return game;
-		} else {
-			logger.error("Player {variable} not found in the system.", username);
-			throw new PlayerNotFoundException();
+	public Game endGame(String username) throws PlayerNotFoundException {
+		playerService.removePlayer(username);
+		Game game = gameSession.removePlayer(username);
+
+		if (game.getType().equals(GameType.HUMAN)) {
+			playerService.removePlayer(game.getPlayers().get(0).getUserName());
 		}
+		logger.info("Present State of the game: " + game.toString());
+		return game;
 	}
 
 	public Game setGameProperties(String username, int size, MarkerType marker) {
@@ -60,12 +55,12 @@ public class GameService {
 		if (size == 1) {
 			game.setSize(size);
 			game.setStatus(GameStatus.FIRST_PLAYER_WON);
-			game.getPlayers().stream().filter(e -> e.getUserName().equals(username)).findFirst().get().setStatus(PlayerStatus.WINNER);
+			game.getPlayers().stream().filter(e -> e.getUserName().equals(username)).findFirst().get()
+					.setStatus(PlayerStatus.WINNER);
 			game.setBoard(gameLogic.createBoard(size));
 			game.setNoOfTurns(0);
 			return game;
 		}
-		System.out.println("Size: " + game.toString());
 		game.setSize(size);
 		if (game.getType() == GameType.COMPUTER) {
 			game.getPlayers().get(0).setMarker(marker);
@@ -76,7 +71,8 @@ public class GameService {
 			}
 			game.setStatus(GameStatus.IN_PROGRESS);
 		} else {
-			game.getPlayers().stream().filter(e -> e.getUserName().equals(username)).findFirst().get().setMarker(marker);
+			game.getPlayers().stream().filter(e -> e.getUserName().equals(username)).findFirst().get()
+					.setMarker(marker);
 			if (game.isAvailable()) {
 				game.setStatus(GameStatus.WAITING_FOR_ANOTHER_PLAYER_TO_JOIN);
 			} else {
@@ -85,7 +81,7 @@ public class GameService {
 		}
 		game.setBoard(gameLogic.createBoard(size));
 		game.setNoOfTurns(0);
-		logger.info("Present State of the game: "+ game.toString());
+		logger.info("Present State of the game: " + game.toString());
 		return game;
 	}
 }

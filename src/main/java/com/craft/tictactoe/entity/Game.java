@@ -5,11 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.craft.tictactoe.constant.EnumValidator;
 import com.craft.tictactoe.constant.GameStatus;
 import com.craft.tictactoe.constant.GameType;
 import com.craft.tictactoe.constant.MarkerType;
@@ -24,10 +27,21 @@ public class Game {
 	@Size(max = 2)
 	private List<Player> players;
 
+	@Min(value = 1, message = "size should not be less than 1")
 	private int size;
 
+	@NotBlank
+	@EnumValidator(
+		     enumClazz = GameType.class,
+		     message = "This error is coming from the GameType class"
+		 )
 	private GameType type;
 
+	@NotBlank
+	@EnumValidator(
+		     enumClazz = GameStatus.class,
+		     message = "This error is coming from the GameStatus class"
+		 )
 	private GameStatus status;
 
 	private int noOfTurns;

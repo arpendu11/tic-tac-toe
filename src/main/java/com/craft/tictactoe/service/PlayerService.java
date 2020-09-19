@@ -34,10 +34,6 @@ public class PlayerService {
 	public void removePlayer(String userName) {
 		playerPool.removePlayer(userName);
 	}
-	
-	public void cleanUp() {
-		playerPool.cleanRepo();
-	}
 
 	public Player getPlayer(String userName) {
 		Game game = gameService.getGameByPlayer(userName);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.craft.tictactoe.constant.GameType;
+import com.craft.tictactoe.constant.MarkerType;
 import com.craft.tictactoe.entity.Game;
 import com.craft.tictactoe.entity.Player;
 import com.craft.tictactoe.exceptions.PlayerNotFoundException;
@@ -18,8 +19,6 @@ import com.craft.tictactoe.exceptions.PlayerNotFoundException;
 public class GameServiceTest {
 	
 	Player newPlayer;
-	Player newPlayer1;
-	Player newPlayer2;
 	Game game;
 	
 	@Autowired
@@ -33,15 +32,26 @@ public class GameServiceTest {
 		newPlayer = new Player("testUser");
 
 		playerService.createNewPlayer(newPlayer.getUserName());
+		gameService.createNewGame(newPlayer, GameType.COMPUTER);
 	}
 	
 	@Test
 	@Order(1)
 	public void createNewGameTest() throws PlayerNotFoundException {
-		String checkGame = "Game [id=2, players=[Player [gameId=2, userName=testUser, marker=null, status=PLAYING, turn=true],"
-				+ " Player [gameId=2, userName=COMPUTER, marker=null, status=PLAYING, turn=false]], size=0, type=COMPUTER,"
+		newPlayer = new Player("testUser1");
+		String checkGame = "Game [id=7, players=[Player [gameId=7, userName=testUser1, marker=null, status=PLAYING, turn=true],"
+				+ " Player [gameId=7, userName=COMPUTER, marker=null, status=PLAYING, turn=false]], size=0, type=COMPUTER,"
 				+ " noOfTurns=0, status=WAITING_FOR_PLAYER_TO_SET_BOARD, board=[]]";
 		assertThat(gameService.createNewGame(newPlayer, GameType.COMPUTER).toString()).isEqualTo(checkGame);
+	}
+	
+	@Test
+	@Order(1)
+	public void setGamePropertiesTest() throws PlayerNotFoundException {
+		String checkGame = "Game [id=5, players=[Player [gameId=5, userName=testUser, marker=CIRCLE, status=PLAYING, turn=true],"
+				+ " Player [gameId=5, userName=COMPUTER, marker=CROSS, status=PLAYING, turn=false]], size=3, type=COMPUTER,"
+				+ " noOfTurns=0, status=IN_PROGRESS, board=[[[1], [2], [3]], [[4], [5], [6]], [[7], [8], [9]]]]";
+		assertThat(gameService.setGameProperties(newPlayer.getUserName(), 3, MarkerType.CIRCLE).toString()).isEqualTo(checkGame);
 	}
 	
 	@AfterEach

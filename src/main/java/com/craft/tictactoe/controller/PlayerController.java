@@ -48,7 +48,7 @@ public class PlayerController {
 	}
 	
 	@GetMapping("/turn")
-	public ResponseEntity<WhoseTurnResource> getNextTurn(@RequestParam(required = true) String userName) {
+	public ResponseEntity<WhoseTurnResource> getNextTurn(@RequestParam(required = true) @Valid String userName) {
 		if (checkPlayer(userName)) {
 			Player player = playerService.getPlayer(userName);
 			return new ResponseEntity<WhoseTurnResource>(whoseTurnResourceConverter.convert(player), HttpStatus.OK);
@@ -59,14 +59,18 @@ public class PlayerController {
 	
 	@PostMapping(path = "/move", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MoveValidResource> playNextMove(@RequestBody @Valid MoveDTO move) {
-		if (checkPlayer(move.getUserName())) {
-			if (playerService.getPlayer(move.getUserName()).getStatus().equals(PlayerStatus.PLAYING)) {
-				Player player = playerService.playNextMove(playerService.getPlayer(move.getUserName()), move.getRow(), move.getColumn());
-				return new ResponseEntity<MoveValidResource>(moveValidResourceConverter.convert(player), HttpStatus.OK);
+		if (move.getUserName() != null && move.getUserName().length() > 0 && move.getRow() > 0 && move.getColumn() > 0) {
+			if (checkPlayer(move.getUserName())) {
+				if (playerService.getPlayer(move.getUserName()).getStatus().equals(PlayerStatus.PLAYING)) {
+					Player player = playerService.playNextMove(playerService.getPlayer(move.getUserName()), move.getRow(), move.getColumn());
+					return new ResponseEntity<MoveValidResource>(moveValidResourceConverter.convert(player), HttpStatus.OK);
+				}
+				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 			}
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			logger.error("Player " + move.getUserName() + " was not found playing any game");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		logger.error("Player " + move.getUserName() + " was not found playing any game");
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		logger.error("Username cannot be null or empty");
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 }
