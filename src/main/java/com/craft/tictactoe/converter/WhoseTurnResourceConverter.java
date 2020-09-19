@@ -27,6 +27,15 @@ public class WhoseTurnResourceConverter extends AbstractConverter<Player, WhoseT
 				if (source.getMarker() == null && source.getStatus() == PlayerStatus.PLAYING) {
 					message = GenericMessage.WAITING_FOR_PLAYER_TO_SET_BOARD.getMessage();
 					next_step = NextStep.WAITING_FOR_PLAYER_TO_SET_BOARD.getMessage();
+				} else if (source.getMarker() != null && source.getStatus() == PlayerStatus.WINNER) {
+					message = GenericMessage.PLAYER_WINNER.getMessage();
+					next_step = NextStep.PLAYER_WINNER.getMessage();
+				} else if (source.getMarker() != null && source.getStatus() == PlayerStatus.LOSER) {
+					message = GenericMessage.PLAYER_LOSER.getMessage();
+					next_step = NextStep.PLAYER_LOSER.getMessage();
+				} else if (source.getMarker() != null && source.getStatus() == PlayerStatus.TIE) {
+					message = GenericMessage.PLAYER_TIE.getMessage();
+					next_step = NextStep.PLAYER_TIE.getMessage();
 				} else {
 					message = GenericMessage.PLAYER_TURN.getMessage();
 					next_step = NextStep.PLAYER_TURN.getMessage();
