@@ -209,7 +209,7 @@ public class GameLogicService {
                 {
                     for(int k=0; k<bs; k++)
                     {
-                        if(!board[i][k].equals(humanMarker.getShape()) && !board[i][k].equals(computerMarker.getShape()))
+                        if(!board[k][i].equals(humanMarker.getShape()) && !board[k][i].equals(computerMarker.getShape()))
                         {
                             logger.info("Computer placing the vertical blocking marker at: "+(k+1)+", "+(i+1));
                             board[k][i] = computerMarker.getShape();
@@ -218,7 +218,6 @@ public class GameLogicService {
                         }
                     }
                 }
-                //}
             }
             counter = 1;
         }
@@ -324,7 +323,6 @@ public class GameLogicService {
                         }
                     }
                 }
-                //}
             }
             counter = 1;
         }

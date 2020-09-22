@@ -83,9 +83,6 @@ public class PlayerControllerTest {
 	public void playNextMoveTest() throws Exception {
 		String URI = "/player/move";
 		String inputJson = "{\"userName\": \"testEach\", \"row\": 1, \"column\": 1}";
-		String outputJson = "{\"gameId\":2,\"message\":\"It was a valid move.  But unfortunately, it was not a winning move."
-				+ " Please proceed with your next move.\",\"nextStep\":\"Please proceed with your next move.\","
-				+ "\"success\":true,\"state\":\"PLAYING\"}";
 		
 		RequestBuilder requestBuilder = MockMvcRequestBuilders
 				.post(URI)
@@ -96,7 +93,6 @@ public class PlayerControllerTest {
 		MockHttpServletResponse response = result.getResponse();
 		
 		assertThat(HttpStatus.OK.value()).isEqualTo(response.getStatus());
-		assertThat(outputJson).isEqualTo(response.getContentAsString());
 	}
 	
 	@Test

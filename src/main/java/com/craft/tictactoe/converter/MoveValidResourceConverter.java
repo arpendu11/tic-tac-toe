@@ -1,14 +1,20 @@
 package com.craft.tictactoe.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.craft.tictactoe.constant.GenericMessage;
 import com.craft.tictactoe.constant.NextStep;
+import com.craft.tictactoe.entity.Game;
 import com.craft.tictactoe.entity.Player;
 import com.craft.tictactoe.resources.MoveValidResource;
+import com.craft.tictactoe.service.GameService;
 
 @Component
 public class MoveValidResourceConverter extends AbstractConverter<Player, MoveValidResource> {
+	
+	@Autowired
+	private GameService gameService;
 	
 	@Override
 	public MoveValidResource convert(Player source) {
@@ -39,8 +45,10 @@ public class MoveValidResourceConverter extends AbstractConverter<Player, MoveVa
 				break;
 			}
 		}
+		
+		Game game = gameService.getGameByPlayer(source.getUserName());
 
-		MoveValidResource resource = new MoveValidResource(source.getGameId(), message, next_step, success, source.getStatus());
+		MoveValidResource resource = new MoveValidResource(source.getGameId(), message, next_step, success, source.getStatus(), game.getBoard());
 		return resource;
 	}
 
