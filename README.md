@@ -14,7 +14,7 @@ The API structure looks something like below:
 | /game/status       | GET    | param: userName           | JSON     | Current State of the game           | (gameId, state(started/Waiting for next move/Ended), message, Print board structure, next step)
 | /game/setBoard     | POST   | JSON: userName,size,marker| JSON     | Set a board to start play           | (success, gameId, message, Display board structure, next step)
 | /player/turn       | GET    | param: userName           | JSON     | Whose turn is it?                   | (message, gameId, Print board structure, next step)
-| /player/move       | POST   | JSON: userName,row,column | JSON     | Play next move                      | (success, gameId, state, message(is valid/won), next step)
+| /player/move       | POST   | JSON: userName,row,column | JSON     | Play next move                      | (success, gameId, state, message(is valid/won), next step, print board structure)
 | /game/exit         | POST   | JSON: userName            | JSON     | Exits the present session of game   | (success, gameId, message, next step)
 
 
