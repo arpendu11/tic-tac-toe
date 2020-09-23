@@ -11,7 +11,6 @@ import com.craft.tictactoe.constant.MarkerType;
 import com.craft.tictactoe.constant.PlayerStatus;
 import com.craft.tictactoe.entity.Game;
 import com.craft.tictactoe.entity.Player;
-import com.craft.tictactoe.exceptions.PlayerNotFoundException;
 import com.craft.tictactoe.repository.GameSessionRepository;
 
 @Service
@@ -39,7 +38,7 @@ public class GameService {
 		return game;
 	}
 
-	public Game endGame(String username) throws PlayerNotFoundException {
+	public Game endGame(String username) {
 		Game game = getGameByPlayer(username);
 		if (game.getType().equals(GameType.HUMAN)) {
 			for (Player p: game.getPlayers()) {

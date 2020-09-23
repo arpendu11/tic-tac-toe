@@ -23,7 +23,6 @@ import com.craft.tictactoe.dto.PlayerDTO;
 import com.craft.tictactoe.dto.SetBoardDTO;
 import com.craft.tictactoe.entity.Game;
 import com.craft.tictactoe.entity.Player;
-import com.craft.tictactoe.exceptions.PlayerNotFoundException;
 import com.craft.tictactoe.resources.GameBoardResource;
 import com.craft.tictactoe.resources.GameResource;
 import com.craft.tictactoe.resources.GameStatusResource;
@@ -113,7 +112,7 @@ public class GameController {
 				notes = "Provide userName to exit this game.",
 				response = GameResource.class)
 	public ResponseEntity<GameResource> exitGame(@ApiParam(name= "PlayerDTO", value = "payload object to exit the game")
-											@RequestBody @Valid PlayerDTO playerDTO) throws PlayerNotFoundException {
+											@RequestBody @Valid PlayerDTO playerDTO) {
 		if (playerDTO.getUserName() != null && playerDTO.getUserName().length() > 0) {
 			if (playerController.checkPlayer(playerDTO.getUserName())) {
 				Game game = gameService.endGame(playerDTO.getUserName());

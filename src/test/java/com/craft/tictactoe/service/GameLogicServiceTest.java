@@ -127,6 +127,94 @@ public class GameLogicServiceTest {
 	}
 	
 	@Test
+	public void blockMoveBlockTrueHorizontalTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[0][0] = "X";
+		initBoard[0][1] = "X";
+		initBoard[1][1] = "O";
+		String[][] checkBoard = initBoard;
+		checkBoard[0][2] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
+	public void blockMoveBlockTrueVerticalTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[0][0] = "X";
+		initBoard[1][0] = "X";
+		initBoard[1][1] = "O";
+		String[][] checkBoard = initBoard;
+		checkBoard[2][0] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
+	public void blockMoveBlockTrueVerticalWinTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[0][0] = "O";
+		initBoard[1][0] = "O";
+		initBoard[1][1] = "X";
+		String[][] checkBoard = initBoard;
+		checkBoard[2][0] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
+	public void blockMoveBlockTrueDiagonalLBRTTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[0][0] = "X";
+		initBoard[1][1] = "X";
+		initBoard[2][1] = "O";
+		String[][] checkBoard = initBoard;
+		checkBoard[2][2] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
+	public void blockMoveBlockTrueDiagonalLBRTWinTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[2][0] = "O";
+		initBoard[1][1] = "O";
+		initBoard[2][1] = "X";
+		String[][] checkBoard = initBoard;
+		checkBoard[0][2] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
+	public void blockMoveBlockTrueDiagonalRTLBTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[0][2] = "X";
+		initBoard[1][1] = "X";
+		initBoard[2][1] = "O";
+		String[][] checkBoard = initBoard;
+		checkBoard[2][0] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
+	public void blockMoveBlockTrueDiagonalRBLTTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[2][2] = "X";
+		initBoard[1][1] = "X";
+		initBoard[2][1] = "O";
+		String[][] checkBoard = initBoard;
+		checkBoard[0][0] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
+	public void blockMoveBlockTrueDiagonalLTRBTTest() {
+		String[][] initBoard = gameLogicService.createBoard(3);
+		initBoard[0][0] = "X";
+		initBoard[1][1] = "X";
+		initBoard[2][1] = "O";
+		String[][] checkBoard = initBoard;
+		checkBoard[2][2] = "O";
+		assertThat(gameLogicService.blockMove(initBoard, MarkerType.CROSS, MarkerType.CIRCLE)).isEqualTo(checkBoard);
+	}
+	
+	@Test
 	public void blockMoveWinTrueSize3Test() {
 		String[][] initBoard = gameLogicService.createBoard(3);
 		initBoard[0][0] = "O";

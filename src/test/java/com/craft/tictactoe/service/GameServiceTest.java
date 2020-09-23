@@ -13,7 +13,6 @@ import com.craft.tictactoe.constant.GameType;
 import com.craft.tictactoe.constant.MarkerType;
 import com.craft.tictactoe.entity.Game;
 import com.craft.tictactoe.entity.Player;
-import com.craft.tictactoe.exceptions.PlayerNotFoundException;
 
 @SpringBootTest
 public class GameServiceTest {
@@ -37,7 +36,7 @@ public class GameServiceTest {
 	
 	@Test
 	@Order(1)
-	public void createNewGameTest() throws PlayerNotFoundException {
+	public void createNewGameTest() {
 		newPlayer = new Player("testUser1");
 		String checkGame = "Game [id=7, players=[Player [gameId=7, userName=testUser1, marker=null, status=PLAYING, turn=true],"
 				+ " Player [gameId=7, userName=COMPUTER, marker=null, status=PLAYING, turn=false]], size=0, type=COMPUTER,"
@@ -47,7 +46,7 @@ public class GameServiceTest {
 	
 	@Test
 	@Order(1)
-	public void setGamePropertiesTest() throws PlayerNotFoundException {
+	public void setGamePropertiesTest() {
 		String checkGame = "Game [id=5, players=[Player [gameId=5, userName=testUser, marker=CIRCLE, status=PLAYING, turn=true],"
 				+ " Player [gameId=5, userName=COMPUTER, marker=CROSS, status=PLAYING, turn=false]], size=3, type=COMPUTER,"
 				+ " noOfTurns=0, status=IN_PROGRESS, board=[[[1], [2], [3]], [[4], [5], [6]], [[7], [8], [9]]]]";
