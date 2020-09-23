@@ -38,18 +38,18 @@ public class GameServiceTest {
 	@Order(1)
 	public void createNewGameTest() {
 		newPlayer = new Player("testUser1");
-		String checkGame = "Game [id=7, players=[Player [gameId=7, userName=testUser1, marker=null, status=PLAYING, turn=true],"
-				+ " Player [gameId=7, userName=COMPUTER, marker=null, status=PLAYING, turn=false]], size=0, type=COMPUTER,"
-				+ " noOfTurns=0, status=WAITING_FOR_PLAYER_TO_SET_BOARD, board=[]]";
+		String checkGame = "Game [id=3, players=[Player [gameId=3, userName=testUser1, marker=null, status=PLAYING,"
+				+ " turn=true], Player [gameId=3, userName=COMPUTER, marker=null, status=PLAYING, turn=false]],"
+				+ " size=0, type=COMPUTER, noOfTurns=0, status=WAITING_FOR_PLAYER_TO_SET_BOARD, board=[]]";
 		assertThat(gameService.createNewGame(newPlayer, GameType.COMPUTER).toString()).isEqualTo(checkGame);
 	}
 	
 	@Test
 	@Order(1)
 	public void setGamePropertiesTest() {
-		String checkGame = "Game [id=5, players=[Player [gameId=5, userName=testUser, marker=CIRCLE, status=PLAYING, turn=true],"
-				+ " Player [gameId=5, userName=COMPUTER, marker=CROSS, status=PLAYING, turn=false]], size=3, type=COMPUTER,"
-				+ " noOfTurns=0, status=IN_PROGRESS, board=[[[1], [2], [3]], [[4], [5], [6]], [[7], [8], [9]]]]";
+		String checkGame = "Game [id=1, players=[Player [gameId=1, userName=testUser, marker=CIRCLE, status=PLAYING,"
+				+ " turn=true], Player [gameId=1, userName=COMPUTER, marker=CROSS, status=PLAYING, turn=false]],"
+				+ " size=3, type=COMPUTER, noOfTurns=0, status=IN_PROGRESS, board=[[[1], [2], [3]], [[4], [5], [6]], [[7], [8], [9]]]]";
 		assertThat(gameService.setGameProperties(newPlayer.getUserName(), 3, MarkerType.CIRCLE).toString()).isEqualTo(checkGame);
 	}
 	
