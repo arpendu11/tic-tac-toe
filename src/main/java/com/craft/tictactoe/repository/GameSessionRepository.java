@@ -1,15 +1,12 @@
 package com.craft.tictactoe.repository;
 
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.craft.tictactoe.constant.GameStatus;
-import com.craft.tictactoe.constant.GameType;
-import com.craft.tictactoe.constant.MarkerType;
 import com.craft.tictactoe.entity.Game;
 import com.craft.tictactoe.entity.Player;
 
@@ -30,10 +27,6 @@ public class GameSessionRepository {
 		return instance;
 	}
 
-	public synchronized Game getGameSession(Long id) {
-		return session.get(id);
-	}
-
 	public synchronized Game getGameSessionByUsername(String username) {
 		for (Game s : session.values()) {
 			for (Player p : s.getPlayers()) {
@@ -48,22 +41,6 @@ public class GameSessionRepository {
 	public synchronized void createGameSession(Game game) {
 		session.putIfAbsent(game.getId(), game);
 		LOGGER.info("Game id: " + game.getId() + " is allocated with a gaming session.");
-	}
-
-	public synchronized Game findAvailableSession() {
-		return session.values().stream().filter(g -> g.isAvailable()).findFirst().get();
-	}
-
-	public synchronized Game addToAvailableSession(Player player, MarkerType marker) {
-		Game game = null;
-		try {
-			game = findAvailableSession();
-			game.addPlayer(player, marker);
-		} catch (NoSuchElementException e) {
-			game = new Game(player, GameType.HUMAN);
-			session.putIfAbsent(game.getId(), game);
-		}
-		return game;
 	}
 
 	public synchronized Game removePlayer(String userName) {
