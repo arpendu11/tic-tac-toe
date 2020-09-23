@@ -30,8 +30,8 @@ public class SwaggerConfig {
             .apiInfo(apiInfo())
             .useDefaultResponseMessages(false)
             .globalResponseMessage(RequestMethod.GET, newArrayList(new ResponseMessageBuilder().code(500)
-            		.message("500 message")
-            		.responseModel(new ModelRef("Error"))
+            		.message("Internal Server Error")
+//            		.responseModel(new ModelRef("Error"))
             		.build(),
             		new ResponseMessageBuilder().code(403)
             		.message("Forbidden!!!!!")

@@ -29,6 +29,9 @@ import com.craft.tictactoe.resources.GameResource;
 import com.craft.tictactoe.resources.GameStatusResource;
 import com.craft.tictactoe.service.GameService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping(path = "/game", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GameController {
@@ -51,7 +54,11 @@ public class GameController {
 	private GameStatusResourceConverter gameStatusResourceConverter;
 	
 	@PostMapping(path = "/new", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GameResource> createNewGame(@RequestBody @Valid NewGameDTO dto) {
+	@ApiOperation(value = "Create a new game",
+				notes = "Provide userName and type of the game as \"HUMAN\" or \"COMPUTER\" with whom you want to play this game with.",
+				response = GameResource.class)
+	public ResponseEntity<GameResource> createNewGame(@ApiParam(name= "NewGameDTO", value = "payload object to start the game")
+												@RequestBody @Valid NewGameDTO dto) {
 		if (dto.getUserName() != null && dto.getUserName().length() > 0) {
 			if (!playerController.checkPlayer(dto.getUserName())) {
 				Player newPlayer = playerController.createNewPlayer(dto.getUserName());
@@ -68,7 +75,11 @@ public class GameController {
 	}
 	
 	@PostMapping(path = "/setBoard", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GameBoardResource> setGamingBoard(@RequestBody @Valid SetBoardDTO board) {
+	@ApiOperation(value = "Set the board of the game which the user has started",
+				notes = "Provide userName, size as size of the board matrix and marker as \"CROSS\" or \"CIRCLE\" to play this game.",
+				response = GameBoardResource.class)
+	public ResponseEntity<GameBoardResource> setGamingBoard(@ApiParam(name= "SetBoardDTO", value = "payload object to set the gaming board")
+														@RequestBody @Valid SetBoardDTO board) {
 		if (board.getUserName() != null && board.getUserName().length() > 0) {
 			if (playerController.checkPlayer(board.getUserName())) {
 				Game game = gameService.setGameProperties(board.getUserName(), board.getSize(), board.getMarker());
@@ -83,7 +94,11 @@ public class GameController {
 	}
 	
 	@GetMapping("/status")
-	public ResponseEntity<GameStatusResource> getCurrentStatus(@RequestParam(required = true) @Valid String userName) {
+	@ApiOperation(value = "Fetch the staus of the game which the user is playing.",
+				notes = "Provide userName as queryParam to get the status of this game.",
+				response = GameStatusResource.class)
+	public ResponseEntity<GameStatusResource> getCurrentStatus(@ApiParam(value = "userName of the player who is playing the game")
+															@RequestParam(required = true) @Valid String userName) {
 		if (playerController.checkPlayer(userName)) {
 			Game game = gameService.getGameByPlayer(userName);
 			return new ResponseEntity<GameStatusResource>(gameStatusResourceConverter.convert(game), HttpStatus.OK);
@@ -94,7 +109,11 @@ public class GameController {
 	}
 	
 	@PostMapping(path = "/exit", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GameResource> exitGame(@RequestBody @Valid PlayerDTO playerDTO) throws PlayerNotFoundException {
+	@ApiOperation(value = "Exit the game which the user is playing at any point of time.",
+				notes = "Provide userName to exit this game.",
+				response = GameResource.class)
+	public ResponseEntity<GameResource> exitGame(@ApiParam(name= "PlayerDTO", value = "payload object to exit the game")
+											@RequestBody @Valid PlayerDTO playerDTO) throws PlayerNotFoundException {
 		if (playerDTO.getUserName() != null && playerDTO.getUserName().length() > 0) {
 			if (playerController.checkPlayer(playerDTO.getUserName())) {
 				Game game = gameService.endGame(playerDTO.getUserName());

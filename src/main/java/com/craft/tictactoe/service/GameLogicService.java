@@ -247,6 +247,30 @@ public class GameLogicService {
             }
         }
         
+     // check if you can block a win diagonally right-bottom to left-top
+        counter = 1;
+        for(int j=bs-1;j>1;j--)
+        {
+            int i=1;
+            if(board[i][i].equals(board[j][j]) && board[j][j].equals(humanMarker.getShape()))
+            {
+                counter = counter+1;
+            }
+            if(counter == bs-1)
+            {
+                for(int k=0;k<bs;k++)
+                {
+                    if(!board[k][k].equals(humanMarker.getShape()) && !board[k][k].equals(computerMarker.getShape()))
+                    {
+                        logger.info("Computer placing the diagonal RB-LT blocking marker at: "+(k+1)+", "+(k+1));
+                        board[k][k] = computerMarker.getShape();
+                        moveTaken = true;
+                        return board;
+                    }
+                }
+            }
+        }
+        
         //Check if you can block a win diagonally from right-top to left-bottom
         counter = 1;
         for(int i=0;i<bs-1;i++)
@@ -262,6 +286,29 @@ public class GameLogicService {
                     if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
                     {
                         logger.info("Computer placing the diagonal RT-LB blocking marker at: "+(k+1)+", "+(bs-1-k+1));
+                        board[k][bs-1-k] = computerMarker.getShape();
+                        moveTaken = true;
+                        return board;
+                    }
+                }
+            }
+        }
+        
+      //Check if you can block a win diagonally from left-bottom to right-top
+        counter = 1;
+        for(int i=bs-1;i>1;i--)
+        {
+            if(board[i][bs-1-i].equals(board[i-1][bs-1-i+1]) && board[i][bs-1-i].equals(humanMarker.getShape()))
+            {
+                counter = counter+1;
+            }
+            if(counter == bs-1)
+            {
+                for(int k=0;k<bs;k++)
+                {
+                    if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
+                    {
+                        logger.info("Computer placing the diagonal LB-RT blocking marker at: "+(k+1)+", "+(bs-1-k+1));
                         board[k][bs-1-k] = computerMarker.getShape();
                         moveTaken = true;
                         return board;
@@ -394,6 +441,29 @@ public class GameLogicService {
                     if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
                     {
                     	logger.info("Computer placing the diagonal RT-LB winning marker at: "+(k+1)+", "+(bs-1-k+1));
+                    	board[k][bs-1-k] = computerMarker.getShape();
+                        moveTaken = true;
+                        return board;
+                    }
+                }
+            }
+        }
+        
+        counter = 1;
+        //Check if you can win diagonally from left-bottom to right-top
+        for(int i=bs-1;i>1;i--)
+        {
+            if(board[i][bs-1-i].equals(board[i-1][bs-1-i+1]) && board[i][bs-1-i].equals(computerMarker.getShape()))
+            {
+                counter = counter+1;
+            }
+            if(counter == bs-1)
+            {
+                for(int k=0;k<bs-1;k++)
+                {
+                    if(!board[k][bs-1-k].equals(humanMarker.getShape()) && !board[k][bs-1-k].equals(computerMarker.getShape()))
+                    {
+                    	logger.info("Computer placing the diagonal LB-RT winning marker at: "+(k+1)+", "+(bs-1-k+1));
                     	board[k][bs-1-k] = computerMarker.getShape();
                         moveTaken = true;
                         return board;

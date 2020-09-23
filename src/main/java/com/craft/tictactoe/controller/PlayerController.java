@@ -24,6 +24,9 @@ import com.craft.tictactoe.resources.MoveValidResource;
 import com.craft.tictactoe.resources.WhoseTurnResource;
 import com.craft.tictactoe.service.PlayerService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping(path = "/player", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PlayerController {
@@ -48,7 +51,11 @@ public class PlayerController {
 	}
 	
 	@GetMapping("/turn")
-	public ResponseEntity<WhoseTurnResource> getNextTurn(@RequestParam(required = true) @Valid String userName) {
+	@ApiOperation(value = "Get the turn of the game which the user is playing.",
+				notes = "Provide userName as queryParam to see whose turn is it to play this game.",
+				response = WhoseTurnResource.class)
+	public ResponseEntity<WhoseTurnResource> getNextTurn(@ApiParam(value = "userName of the player who is playing the game")
+													@RequestParam(required = true) @Valid String userName) {
 		if (checkPlayer(userName)) {
 			Player player = playerService.getPlayer(userName);
 			return new ResponseEntity<WhoseTurnResource>(whoseTurnResourceConverter.convert(player), HttpStatus.OK);
@@ -58,7 +65,11 @@ public class PlayerController {
 	}
 	
 	@PostMapping(path = "/move", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<MoveValidResource> playNextMove(@RequestBody @Valid MoveDTO move) {
+	@ApiOperation(value = "Play the next move in the game which the user is playing",
+				notes = "Provide userName, row as row index and column as column index of the board matrix to playthe next move in this game.",
+				response = MoveValidResource.class)
+	public ResponseEntity<MoveValidResource> playNextMove(@ApiParam(name= "MoveDTO", value = "payload object to play the next move")
+												@RequestBody @Valid MoveDTO move) {
 		if (move.getUserName() != null && move.getUserName().length() > 0 && move.getRow() > 0 && move.getColumn() > 0) {
 			if (checkPlayer(move.getUserName())) {
 				if (playerService.getPlayer(move.getUserName()).getStatus().equals(PlayerStatus.PLAYING)) {
